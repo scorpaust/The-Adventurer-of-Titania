@@ -11,8 +11,8 @@ public static class TagManager
     public static string HORIZONTAL_AXIS = "Horizontal";
     public static string VERTICAL_AXIS = "Vertical";
 
-    public static string FACE_X_ANIMATION_PARAMETER = "FaceX";
-    public static string FACE_Y_ANIMATION_PARAMETER = "FaceY";
+    public static string FACE_X_ANIMATION_PARAMETER = "Face_X";
+    public static string FACE_Y_ANIMATION_PARAMETER = "Face_Y";
     public static string SHOOT_ANIMATION_PARAMETER = "Shoot";
     public static string EXPLODE_ANIMATION_PARAMETER = "Explode";
     public static string WALK_ANIMATION_PARAMETER = "Walk";
