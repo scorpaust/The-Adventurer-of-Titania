@@ -16,6 +16,8 @@ public class PlayerMovement : CharacterMovement
 
     private PlayerWeaponManager playerWeaponManager;
 
+    private CharacterHealth playerHealth;
+
 	protected override void Awake()
 	{
 		base.Awake();
@@ -30,7 +32,7 @@ public class PlayerMovement : CharacterMovement
 	// Start is called before the first frame update
 	void Start()
     {
-        
+        playerHealth = GetComponent<CharacterHealth>();
     }
 
     // Update is called once per frame
@@ -96,6 +98,8 @@ public class PlayerMovement : CharacterMovement
 
 	private void FixedUpdate()
 	{
+        if (!playerHealth.IsAlive()) return;
+
         moveX = Input.GetAxisRaw(TagManager.HORIZONTAL_AXIS);
 
         moveY = Input.GetAxisRaw(TagManager.VERTICAL_AXIS);

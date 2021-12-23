@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy : CharacterMovement
 {
     // For testing. Delete later.
-    public bool CHASE_PLAYER;
+    // public bool CHASE_PLAYER;
 
     [SerializeField]
     private float damageCoolDownThreshold = 1f;
@@ -37,6 +37,8 @@ public class Enemy : CharacterMovement
 
     private Vector3 myScale;
 
+    private CharacterHealth enemyHealth;
+
 	protected override void Awake()
 	{
 		base.Awake();
@@ -45,6 +47,8 @@ public class Enemy : CharacterMovement
 	private void Start()
 	{
         playerTarget = GameObject.FindGameObjectWithTag(TagManager.PLAYER_TAG).transform;
+
+        enemyHealth = GetComponent<CharacterHealth>();
 
         playerLastTrackPos = playerTarget.position;
 
@@ -59,17 +63,25 @@ public class Enemy : CharacterMovement
 
 	private void Update()
 	{
+        if (!playerTarget) return;
+
+        if (!enemyHealth.IsAlive()) return;
+
         HandleFacingDirection();
 	}
 
 	private void FixedUpdate()
 	{
+        if (!playerTarget) return;
+
+        if (!enemyHealth.IsAlive()) return;
+
         HandleChasingPlayer();
 	}
 
 	private void HandleChasingPlayer()
 	{
-        if (CHASE_PLAYER)
+        if (HasPlayerTarget)
 		{
             if (!dealtDamageToPlayer)
 			{
@@ -122,7 +134,7 @@ public class Enemy : CharacterMovement
 	{
         myScale = transform.localScale;
 
-        if (CHASE_PLAYER)
+        if (HasPlayerTarget)
 		{
             if (playerTarget.position.x > transform.position.x)
 			{
@@ -148,4 +160,15 @@ public class Enemy : CharacterMovement
         transform.localScale = myScale;
 	}
 
+	private void OnTriggerEnter2D(Collider2D collision)
+	{
+		if (collision.CompareTag(TagManager.PLAYER_TAG))
+		{
+            damageCoolDownTimer = Time.time + damageCoolDownThreshold;
+
+            dealtDamageToPlayer = true;
+
+            collision.GetComponent<CharacterHealth>().TakeDamage(damageAmount);
+		}
+	}
 }

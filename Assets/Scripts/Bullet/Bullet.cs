@@ -92,6 +92,7 @@ public class Bullet : MonoBehaviour
 				dealtDamage = true;
 
 				// Deal damage to enemy
+				collision.GetComponent<CharacterHealth>().TakeDamage(damageAmount);
 			}
 		}
 
