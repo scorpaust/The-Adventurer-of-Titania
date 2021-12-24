@@ -109,6 +109,4 @@ public class PlayerMovement : CharacterMovement
         HandleMovement(moveX, moveY);
 	}
 
-
-
 }

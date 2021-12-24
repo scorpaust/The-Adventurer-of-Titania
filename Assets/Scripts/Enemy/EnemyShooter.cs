@@ -20,6 +20,16 @@ public class EnemyShooter : MonoBehaviour
     [SerializeField]
     private float moveSpeed = 0.75f;
 
+    [SerializeField]
+    private float shootTimeDelay;
+
+    [SerializeField]
+    private Transform bulletSpawnPos;
+
+    private float shootTimer;
+
+    private Transform playerTransform;
+
     private float minXY_Pos, maxXY_Pos;
 
     private Vector3 minPos, maxPos;
@@ -33,6 +43,12 @@ public class EnemyShooter : MonoBehaviour
     private bool changedPos;
 
     private Vector3 myScale;
+
+    private EnemyShootController enemyShootController;
+
+    private bool playerInRange;
+
+    private CharacterHealth enemyHeath;
 
 	private void Awake()
 	{
@@ -59,22 +75,38 @@ public class EnemyShooter : MonoBehaviour
         }
 
         changingPosTimer = Time.time + changingPosDelay;
+
+        enemyShootController = GetComponent<EnemyShootController>();
+
+        enemyHeath = GetComponent<CharacterHealth>();
     }
 
 	// Start is called before the first frame update
 	void Start()
     {
-        
+        playerTransform = GameObject.FindGameObjectWithTag(TagManager.PLAYER_TAG).transform;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (!enemyHeath.IsAlive())
+            return;
+
+        if (!playerTransform)
+            return;
+
+        CheckToShootPlayer();
     }
 
 	private void FixedUpdate()
 	{
+        if (!enemyHeath.IsAlive())
+            return;
+
+        if (!playerTransform)
+            return;
+
         EnemyMovement();
 	}
 
@@ -142,4 +174,24 @@ public class EnemyShooter : MonoBehaviour
 
         HandleFacingDirection();
     }
+
+    private void CheckToShootPlayer()
+	{
+        if (playerInRange)
+		{
+            if (Time.time > shootTimer)
+			{
+                shootTimer = Time.time + shootTimeDelay;
+
+                Vector2 direction = (playerTransform.position - bulletSpawnPos.position).normalized;
+
+                enemyShootController.Shoot(direction, bulletSpawnPos.position);
+			}
+		}
+	}
+
+    public void SetPlayerInRange(bool inRange)
+	{
+        playerInRange = inRange;
+	}
 }
