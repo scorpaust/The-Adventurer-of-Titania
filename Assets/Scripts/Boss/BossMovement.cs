@@ -16,6 +16,9 @@ public class BossMovement : MonoBehaviour
 	[SerializeField]
 	private float shootTimeDelay = 2f;
 
+	[SerializeField]
+	private GameObject door;
+
 	private float shootTimer;
 
 	private EnemyShootController enemyShootController;
@@ -58,6 +61,12 @@ public class BossMovement : MonoBehaviour
 		HandleFacingDirection();
 
 		HandleShooting();
+	}
+
+	private void OnDisable()
+	{
+		if (!bossHealth.IsAlive())
+			door.SetActive(false);
 	}
 
 	private void GetRandomMovementPosition()

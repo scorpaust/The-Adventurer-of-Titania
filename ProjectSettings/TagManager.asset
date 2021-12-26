@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - Boss
   - ShooterEnemy
+  - MainMenuCharacter
   layers:
   - Default
   - TransparentFX
@@ -18,8 +19,8 @@ TagManager:
   - UI
   - Blocking
   - Enemy
-  - 
-  - 
+  - Light
+  - Level
   - 
   - 
   - 
@@ -47,7 +48,7 @@ TagManager:
     uniqueID: 0
     locked: 0
   - name: Level
-    uniqueID: 2308861543
+    uniqueID: 2258731917
     locked: 0
   - name: Bullet
     uniqueID: 369303155
