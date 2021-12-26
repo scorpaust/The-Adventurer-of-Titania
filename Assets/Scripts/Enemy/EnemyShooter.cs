@@ -26,6 +26,9 @@ public class EnemyShooter : MonoBehaviour
     [SerializeField]
     private Transform bulletSpawnPos;
 
+    [SerializeField]
+    private EnemyBatchHandler enemyBatch;
+
     private float shootTimer;
 
     private Transform playerTransform;
@@ -48,7 +51,7 @@ public class EnemyShooter : MonoBehaviour
 
     private bool playerInRange;
 
-    private CharacterHealth enemyHeath;
+    private CharacterHealth enemyHealth;
 
 	private void Awake()
 	{
@@ -78,7 +81,7 @@ public class EnemyShooter : MonoBehaviour
 
         enemyShootController = GetComponent<EnemyShootController>();
 
-        enemyHeath = GetComponent<CharacterHealth>();
+        enemyHealth = GetComponent<CharacterHealth>();
     }
 
 	// Start is called before the first frame update
@@ -87,10 +90,11 @@ public class EnemyShooter : MonoBehaviour
         playerTransform = GameObject.FindGameObjectWithTag(TagManager.PLAYER_TAG).transform;
     }
 
+
     // Update is called once per frame
     void Update()
     {
-        if (!enemyHeath.IsAlive())
+        if (!enemyHealth.IsAlive())
             return;
 
         if (!playerTransform)
@@ -101,7 +105,7 @@ public class EnemyShooter : MonoBehaviour
 
 	private void FixedUpdate()
 	{
-        if (!enemyHeath.IsAlive())
+        if (!enemyHealth.IsAlive())
             return;
 
         if (!playerTransform)
@@ -110,7 +114,13 @@ public class EnemyShooter : MonoBehaviour
         EnemyMovement();
 	}
 
-    private void HandleFacingDirection()
+	private void OnDisable()
+	{
+        if (!enemyHealth.IsAlive())
+            enemyBatch.RemoveShooterEnemy(this);
+    }
+
+	private void HandleFacingDirection()
 	{
         myScale = transform.localScale;
 

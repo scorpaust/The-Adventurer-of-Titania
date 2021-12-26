@@ -12,6 +12,8 @@ public class CharacterHealth : MonoBehaviour
 
     private Animator anim;
 
+	private bool exploded = false;
+
 	private void Awake()
 	{
         anim = GetComponent<Animator>();
@@ -31,9 +33,10 @@ public class CharacterHealth : MonoBehaviour
 	{
 		health -= amount;
 
-		if (health <= 0f)
+		if (health <= 0f && !exploded)
 		{
 			anim.SetTrigger(TagManager.DEATH_ANIMATION_PARAMETER);
+			exploded = true;
 		}
 	}
 

@@ -16,17 +16,40 @@ public class EnemyTargetController : MonoBehaviour
     [SerializeField]
     private EnemyBatchHandler enemyBatch;
 
+	[SerializeField]
+	private BossMovement bossEnemy;
+
+	[SerializeField]
+	private bool bossZoneDetection;
+
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		if (collision.CompareTag(TagManager.PLAYER_TAG))
+		if (bossZoneDetection)
 		{
-			if (enemyTargetType == EnemyTargetType.EnableEnemyTarget)
+			if (collision.CompareTag(TagManager.PLAYER_TAG))
 			{
-				enemyBatch.EnablePlayerTarget();
+				if (enemyTargetType == EnemyTargetType.EnableEnemyTarget && bossEnemy)
+				{
+					bossEnemy.PlayerDetectedInfo(true);
+				}
+				else if (enemyTargetType == EnemyTargetType.DisableEnemyTarget && bossEnemy)
+				{
+					bossEnemy.PlayerDetectedInfo(false);
+				}
 			}
-			else
+		}
+		else
+		{
+			if (collision.CompareTag(TagManager.PLAYER_TAG))
 			{
-				enemyBatch.DisablePlayerTarget();
+				if (enemyTargetType == EnemyTargetType.EnableEnemyTarget)
+				{
+					enemyBatch.EnablePlayerTarget();
+				}
+				else
+				{
+					enemyBatch.DisablePlayerTarget();
+				}
 			}
 		}
 	}

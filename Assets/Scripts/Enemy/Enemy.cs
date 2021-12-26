@@ -19,6 +19,9 @@ public class Enemy : CharacterMovement
     [SerializeField]
     private float turningDelayRate = 1f;
 
+    [SerializeField]
+    private EnemyBatchHandler enemyBatch;
+
     private Transform playerTarget;
 
     private Vector3 playerLastTrackPos;
@@ -47,6 +50,8 @@ public class Enemy : CharacterMovement
 	private void Start()
 	{
         playerTarget = GameObject.FindGameObjectWithTag(TagManager.PLAYER_TAG).transform;
+
+        enemyBatch = GetComponentInParent<EnemyBatchHandler>();
 
         enemyHealth = GetComponent<CharacterHealth>();
 
@@ -77,6 +82,12 @@ public class Enemy : CharacterMovement
         if (!enemyHealth.IsAlive()) return;
 
         HandleChasingPlayer();
+	}
+
+	private void OnDisable()
+	{
+        if (!enemyHealth.IsAlive())
+            enemyBatch.RemoveEnemy(this);
 	}
 
 	private void HandleChasingPlayer()
